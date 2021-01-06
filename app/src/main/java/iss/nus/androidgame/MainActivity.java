@@ -76,8 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
                 ImageAdapter adapter = (ImageAdapter) parent.getAdapter();
 
-                // Get the button that we have clicked
-                MemoryImageView iv = adapter.getSelectedImageView(position);
+                MemoryImageView iv = v.findViewById(position + 1);
                 iv.toggle();
 
                 Integer pos = (Integer) position;

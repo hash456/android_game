@@ -14,7 +14,6 @@ import java.util.HashMap;
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private Integer[] mThumbIds;
-    private HashMap<Integer, MemoryImageView> lookup = new HashMap<>();
 
     // Constructor
     public ImageAdapter(Context c, Integer[] i) {
@@ -36,10 +35,6 @@ public class ImageAdapter extends BaseAdapter {
         return position;
     }
 
-    public MemoryImageView getSelectedImageView(int position) {
-        return lookup.get(position);
-    }
-
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         MemoryImageView imageView;
@@ -48,7 +43,7 @@ public class ImageAdapter extends BaseAdapter {
             imageView = new MemoryImageView(mContext);
             imageView.setLayoutParams(new GridView.LayoutParams(180, 180));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setId(View.generateViewId());
+            imageView.setId(position + 1);
             imageView.setPadding(10, 10, 10, 10);
         }
         else
@@ -57,7 +52,6 @@ public class ImageAdapter extends BaseAdapter {
         }
 
         imageView.setBackgroundResource(mThumbIds[position]);
-        lookup.put(position, imageView);
 
         return imageView;
     }
