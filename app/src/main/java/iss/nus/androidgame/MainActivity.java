@@ -39,11 +39,20 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), urlToFetch , Toast.LENGTH_SHORT).show();
                         // TODO: Fetch Images here
                     } else {
-                        Toast.makeText(getApplicationContext(), "Please enter a URL" , Toast.LENGTH_SHORT).show();
-                        // Temporary start the game here
-                        Intent intent = new Intent(MainActivity.this, GameActivity.class);
-                        startActivity(intent);
+                        Toast.makeText(getApplicationContext(), "Please enter a vaild URL" , Toast.LENGTH_SHORT).show();
                     }
+                }
+            }
+        });
+
+        Button startGameButton = findViewById(R.id.startGameButton);
+        startGameButton.setVisibility(View.GONE);
+        startGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(selectedImageId.size() == 6) {
+                    Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -96,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
                     selectedImageId.remove(imageId);
                 }
 
+                if(selectedImageId.size() == 6) {
+                    startGameButton.setVisibility(View.VISIBLE);
+                } else {
+                    startGameButton.setVisibility(View.GONE);
+                }
             }
         });
 
