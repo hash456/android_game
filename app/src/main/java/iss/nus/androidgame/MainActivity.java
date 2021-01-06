@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
 
     // https://www.google.com/search?tbm=isch&q=findSomeImage
 
-    Set<Integer> selectedImagePosition = new HashSet<>();
     Set<Integer> selectedImageId = new HashSet<>();
 
     @Override
@@ -61,16 +60,16 @@ public class MainActivity extends AppCompatActivity {
                 R.drawable.stop,
                 R.drawable.tired,
                 R.drawable.what,
-                R.drawable.afraid,
-                R.drawable.full,
-                R.drawable.hug,
-                R.drawable.laugh,
-                R.drawable.no_way,
-                R.drawable.peep,
-                R.drawable.snore,
-                R.drawable.stop,
-                R.drawable.tired,
-                R.drawable.what,
+                R.drawable.one,
+                R.drawable.two,
+                R.drawable.three,
+                R.drawable.four,
+                R.drawable.five,
+                R.drawable.six,
+                R.drawable.seven,
+                R.drawable.eight,
+                R.drawable.nine,
+                R.drawable.ten,
         };
 
         //  Include this whole part after we have get the images
@@ -86,44 +85,17 @@ public class MainActivity extends AppCompatActivity {
                 MemoryImageView iv = v.findViewById(position + 1);
 
                 iv.toggle();
-                // Position Based
-                if(iv.getSelected() && selectedImagePosition.size() < 6) {
-                    selectedImagePosition.add(position);
-                } else if(iv.getSelected() && selectedImagePosition.size() >= 6) {
+
+                // Id based
+                if(iv.getSelected() && selectedImageId.size() < 6) {
+                    selectedImageId.add(imageId);
+                } else if(iv.getSelected() && selectedImageId.size() >= 6) {
                     iv.toggle();
                     Toast.makeText(getApplicationContext(), "6 image chosen", Toast.LENGTH_SHORT).show();
                 } else {
-                    selectedImagePosition.remove(position);
+                    selectedImageId.remove(imageId);
                 }
 
-                // Id based
-//                if(iv.getSelected() && selectedImageId.size() < 6) {
-//                    selectedImageId.add(imageId);
-//                } else if(iv.getSelected() && selectedImageId.size() >= 6) {
-//                    iv.toggle();
-//                    Toast.makeText(getApplicationContext(), "6 image chosen", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    selectedImageId.remove(imageId);
-//                }
-
-//                if(selectedImageId.size() < 6) {
-//                    iv.toggle();
-//                    if(iv.getSelected()) {
-//                        selectedImageId.add(imageId);
-//                    } else {
-//                        selectedImageId.remove(imageId);
-//                    }
-//                } else {
-//                    if(iv.getSelected()) {
-//                        iv.toggle();
-//                        selectedImageId.remove(imageId);
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), "start", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-
-//                Integer pos = (Integer) position;
-//                Toast.makeText(getApplicationContext(), pos.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
