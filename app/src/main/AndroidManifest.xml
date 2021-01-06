@@ -24,7 +24,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="Choose 6 images" />
+            android:label="@string/main_activity" />
         <activity
             android:name=".GameActivity"
             android:label="@string/title_activity_game" />

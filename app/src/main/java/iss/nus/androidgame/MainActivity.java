@@ -11,9 +11,17 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class MainActivity extends AppCompatActivity {
 
     // https://www.google.com/search?tbm=isch&q=findSomeImage
+
+    Set<Integer> selectedImagePosition = new HashSet<>();
+    Set<Integer> selectedImageId = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,15 +81,49 @@ public class MainActivity extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id){
                 // Get the R.drawable id of the selected picture
-                Integer selectedImageId = (Integer) parent.getItemAtPosition(position);
-
-                ImageAdapter adapter = (ImageAdapter) parent.getAdapter();
+                Integer imageId = (Integer) parent.getItemAtPosition(position);
 
                 MemoryImageView iv = v.findViewById(position + 1);
-                iv.toggle();
 
-                Integer pos = (Integer) position;
-                Toast.makeText(getApplicationContext(), pos.toString(), Toast.LENGTH_SHORT).show();
+                iv.toggle();
+                // Position Based
+                if(iv.getSelected() && selectedImagePosition.size() < 6) {
+                    selectedImagePosition.add(position);
+                } else if(iv.getSelected() && selectedImagePosition.size() >= 6) {
+                    iv.toggle();
+                    Toast.makeText(getApplicationContext(), "6 image chosen", Toast.LENGTH_SHORT).show();
+                } else {
+                    selectedImagePosition.remove(position);
+                }
+
+                // Id based
+//                if(iv.getSelected() && selectedImageId.size() < 6) {
+//                    selectedImageId.add(imageId);
+//                } else if(iv.getSelected() && selectedImageId.size() >= 6) {
+//                    iv.toggle();
+//                    Toast.makeText(getApplicationContext(), "6 image chosen", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    selectedImageId.remove(imageId);
+//                }
+
+//                if(selectedImageId.size() < 6) {
+//                    iv.toggle();
+//                    if(iv.getSelected()) {
+//                        selectedImageId.add(imageId);
+//                    } else {
+//                        selectedImageId.remove(imageId);
+//                    }
+//                } else {
+//                    if(iv.getSelected()) {
+//                        iv.toggle();
+//                        selectedImageId.remove(imageId);
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "start", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+
+//                Integer pos = (Integer) position;
+//                Toast.makeText(getApplicationContext(), pos.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 

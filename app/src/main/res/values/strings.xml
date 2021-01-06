@@ -12,5 +12,6 @@
     <string name="fetch">Fetch</string>
     <string name="placeholder_to_choose_images">Placeholder to choose images</string>
     <string name="start_game">Start Game</string>
-    <string name="title_activity_landing">LandingActivity</string>
+    <string name="title_activity_landing">Two Match</string>
+    <string name="main_activity">Choose 6 images</string>
 </resources>
