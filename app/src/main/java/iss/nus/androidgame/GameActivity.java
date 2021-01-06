@@ -2,6 +2,7 @@ package iss.nus.androidgame;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -123,6 +124,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 MemoryButton tempButton = new MemoryButton(this, r, c, buttonGraphics[buttonGraphicLocations[r * numColumns + c]]);
                 tempButton.setId(View.generateViewId());
                 tempButton.setOnClickListener(this);
+                tempButton.setWidth(200);
+                tempButton.setHeight(200);
                 buttons[r * numColumns + c] = tempButton;
                 gridLayout.addView(tempButton);
             }
@@ -203,7 +206,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             isBusy = true;
 
             // If user select both wrong buttons, delay input and flip back both buttons first before accepting new input
-            final Handler handler = new Handler();
+            final Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
