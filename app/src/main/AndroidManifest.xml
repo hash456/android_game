@@ -11,8 +11,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AndroidGame">
-        <activity android:name=".MainActivity">
+        android:theme="@style/launcher_theme">
+
+        <activity
+            android:name=".LandingActivity"
+            android:label="@string/title_activity_landing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,11 +23,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".MainActivity"
+            android:label="Choose 6 images" />
+        <activity
             android:name=".GameActivity"
-            android:label="@string/title_activity_game">
-
-        </activity>
-
+            android:label="@string/title_activity_game" />
     </application>
 
 </manifest>

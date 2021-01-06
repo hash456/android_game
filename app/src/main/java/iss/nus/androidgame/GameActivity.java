@@ -1,5 +1,6 @@
 package iss.nus.androidgame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,6 +39,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_AppCompat_Light_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
@@ -61,14 +63,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                finish();
+                                Intent intent = new Intent(GameActivity.this, LandingActivity.class);
+                                startActivity(intent);
                             }
                         });
 
         TextView Countdown = findViewById(R.id.countdown);
 
         //Countdown Timer
-        new CountDownTimer(60000, 1000) {
+        new CountDownTimer(6000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 if (millisUntilFinished <= 11000)
