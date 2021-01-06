@@ -14,6 +14,7 @@ import android.graphics.Color;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
@@ -24,7 +25,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     // List of button position and images
     private int[] buttonGraphicLocations;
     // Image ID
-    private int[] buttonGraphics;
+//    private int[] buttonGraphics;
+    private ArrayList<Integer> buttonGraphics;
 
     // Reference to compare two buttons
     private MemoryButton selectedButton1;
@@ -71,7 +73,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         TextView Countdown = findViewById(R.id.countdown);
 
         //Countdown Timer
-        new CountDownTimer(6000, 1000) {
+        new CountDownTimer(60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 if (millisUntilFinished <= 11000)
@@ -109,13 +111,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         buttons = new MemoryButton[numberOfElements];
 
         // Load the images
-        buttonGraphics = new int[numberOfElements / 2];
-        buttonGraphics[0] = R.drawable.afraid;
-        buttonGraphics[1] = R.drawable.full;
-        buttonGraphics[2] = R.drawable.hug;
-        buttonGraphics[3] = R.drawable.laugh;
-        buttonGraphics[4] = R.drawable.no_way;
-        buttonGraphics[5] = R.drawable.peep;
+        buttonGraphics = getIntent().getIntegerArrayListExtra("images");
 
         // Shuffle the images and button position
         buttonGraphicLocations = new int[numberOfElements];
@@ -124,7 +120,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         // Add the image to GridLayout and add on click listener
         for(int r = 0; r < numRows; r++) {
             for(int c = 0; c < numColumns; c++) {
-                MemoryButton tempButton = new MemoryButton(this, r, c, buttonGraphics[buttonGraphicLocations[r * numColumns + c]]);
+                int index = buttonGraphicLocations[r * numColumns + c];
+                MemoryButton tempButton = new MemoryButton(this, r, c, buttonGraphics.get(index));
                 tempButton.setId(View.generateViewId());
                 tempButton.setOnClickListener(this);
                 tempButton.setWidth(200);

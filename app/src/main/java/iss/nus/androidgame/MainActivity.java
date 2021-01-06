@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -52,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(selectedImageId.size() == 6) {
                     Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                    // Need to convert to ArrayList first as intent cannot send Sets
+                    ArrayList<Integer> imageList = new ArrayList<>(selectedImageId);
+                    intent.putIntegerArrayListExtra("images", imageList);
                     startActivity(intent);
                 }
             }
@@ -95,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
                 iv.toggle();
 
-                // Id based
+                // Image Id based
                 if(iv.getSelected() && selectedImageId.size() < 6) {
                     selectedImageId.add(imageId);
                 } else if(iv.getSelected() && selectedImageId.size() >= 6) {
