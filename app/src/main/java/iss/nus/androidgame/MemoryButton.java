@@ -2,6 +2,7 @@ package iss.nus.androidgame;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.widget.GridLayout;
 
