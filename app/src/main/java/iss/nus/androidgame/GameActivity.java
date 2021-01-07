@@ -49,6 +49,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private SoundEffect sound;
     Animation animation;
 
+    private boolean timeOut = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_Light_NoActionBar);
@@ -108,6 +110,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             public void onFinish() {
+                timeOut = true;
                 String title = "Time's up!";
                 String msg = "You took " + numberOfTries.toString() +  " tries to get " + numberOfMatches.toString() + " number of matches.";
                 dlg.setMessage(msg).setTitle(title).setIcon(android.R.drawable.ic_dialog_alert).show();
@@ -137,6 +140,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             for(int c = 0; c < numColumns; c++) {
                 int index = buttonGraphicLocations[r * numColumns + c];
                 MemoryButton tempButton = new MemoryButton(this, r, c, buttonGraphics.get(index));
+                tempButton.setTag(index);
                 tempButton.setId(View.generateViewId());
                 tempButton.setOnClickListener(this);
                 tempButton.setWidth(200);
@@ -176,7 +180,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         animation= AnimationUtils.loadAnimation(GameActivity.this,R.anim.bounce);
-        if(isBusy)
+        if(isBusy || timeOut)
             return;
 
         MemoryButton button = (MemoryButton) v;
@@ -200,7 +204,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             numTries.setText(numberOfTries.toString());
         }
 
-        if(selectedButton1.getFrontImageDrawableId() == button.getFrontImageDrawableId()) {
+        if(selectedButton1.getTag() == button.getTag()) {
+//        if(selectedButton1.getFrontImageDrawableId() == button.getFrontImageDrawableId()) {
             button.flip();
             sound.playMatchedSound();
             button.setMatched(true);
