@@ -3,14 +3,22 @@ package iss.nus.androidgame;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,9 +49,27 @@ public class MainActivity extends AppCompatActivity {
                 if(imageUrl != null) {
                     String urlToFetch = imageUrl.getText().toString().trim();
                     if(!urlToFetch.isEmpty()) {
+
+                        System.out.println("from main url not empty");
+
+                        Intent intent = new Intent (MainActivity.this, JsoupCrawler.class);
+                        intent.setAction("download");
+                        intent.putExtra("URL",urlToFetch);
+                        startService(intent);
+
+
                         Toast.makeText(getApplicationContext(), urlToFetch , Toast.LENGTH_SHORT).show();
                         // TODO: Use JsoupCrawler to get image url and store it in imageUrlList, then we use the link to download the images
                         // Android does not allow network operation like connecting to a url on main thread
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                imagesToImageViews();
+                                stopService(new Intent(MainActivity.this, JsoupCrawler.class));
+
+                            }
+                        }, 10000);
                     } else {
                         Toast.makeText(getApplicationContext(), "URL cannot be empty" , Toast.LENGTH_SHORT).show();
                     }
@@ -122,5 +148,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    protected void imagesToImageViews(){
+        File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File file = new File(dir, "pic5");
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+        if (bitmap != null)
+        {
+            int id = getResources().getIdentifier("image1","id",getPackageName());
+            ImageView im = findViewById(id);
+            Drawable d = new BitmapDrawable(getResources(), bitmap);
+            im.setImageDrawable(d);
+        }
     }
 }

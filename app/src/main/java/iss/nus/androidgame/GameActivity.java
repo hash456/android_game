@@ -132,8 +132,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 MemoryButton tempButton = new MemoryButton(this, r, c, buttonGraphics.get(index));
                 tempButton.setId(View.generateViewId());
                 tempButton.setOnClickListener(this);
-                tempButton.setWidth(200);
-                tempButton.setHeight(200);
+                tempButton.setWidth(100);
+                tempButton.setHeight(100);
                 buttons[r * numColumns + c] = tempButton;
                 gridLayout.addView(tempButton);
             }
