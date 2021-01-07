@@ -143,8 +143,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 tempButton.setTag(index);
                 tempButton.setId(View.generateViewId());
                 tempButton.setOnClickListener(this);
-                tempButton.setWidth(100);
-                tempButton.setHeight(100);
+                tempButton.setWidth(200);
+                tempButton.setHeight(200);
                 buttons[r * numColumns + c] = tempButton;
                 gridLayout.addView(tempButton);
             }
@@ -205,7 +205,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if(selectedButton1.getTag() == button.getTag()) {
-//        if(selectedButton1.getFrontImageDrawableId() == button.getFrontImageDrawableId()) {
             button.flip();
             sound.playMatchedSound();
             button.setMatched(true);
