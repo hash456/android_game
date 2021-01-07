@@ -15,4 +15,5 @@
     <string name="title_activity_landing">Two Match</string>
     <string name="main_activity">Choose 6 images</string>
     <string name="start">Start</string>
+    <string name="tries">Tries:</string>
 </resources>
