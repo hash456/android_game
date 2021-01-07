@@ -1,7 +1,9 @@
 package iss.nus.androidgame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ import android.graphics.Color;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
@@ -22,7 +25,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     // List of button position and images
     private int[] buttonGraphicLocations;
     // Image ID
-    private int[] buttonGraphics;
+    private ArrayList<Integer> buttonGraphics;
 
     // Reference to compare two buttons
     private MemoryButton selectedButton1;
@@ -32,20 +35,30 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private boolean isBusy = false;
 
     private Integer numberOfMatches = 0;
+    private TextView numMatches;
+
+    private Integer numberOfTries = 0;
+    private TextView numTries;
 
     private AlertDialog.Builder dlg;
 
+    private CountDownTimer myStopwatch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_AppCompat_Light_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
         //Number of matches
-        TextView numMatches = findViewById(R.id.numMatches);
+        numMatches = findViewById(R.id.numMatches);
         if (numMatches != null)
         {
-            numMatches.setText(numberOfMatches.toString());
+            numMatches.setText(numberOfMatches.toString() + " / 6");
         }
+
+        numTries = findViewById(R.id.numTries);
+        numTries.setText(numberOfTries.toString());
 
         //Countdown timer time's up alert
         dlg = new AlertDialog.Builder(this)
@@ -60,14 +73,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                finish();
+                                Intent intent = new Intent(GameActivity.this, LandingActivity.class);
+                                startActivity(intent);
                             }
                         });
 
         TextView Countdown = findViewById(R.id.countdown);
 
         //Countdown Timer
-        new CountDownTimer(60000, 1000) {
+        myStopwatch = new CountDownTimer(60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 if (millisUntilFinished <= 11000)
@@ -84,12 +98,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 }
-
             }
 
             public void onFinish() {
                 String title = "Time's up!";
-                String msg = "Total number of matches: " + numberOfMatches.toString();
+                String msg = "You took " + numberOfTries.toString() +  " to get " + numberOfMatches.toString() + " number of matches.";
                 dlg.setMessage(msg).setTitle(title).setIcon(android.R.drawable.ic_dialog_alert).show();
             }
 
@@ -106,13 +119,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         buttons = new MemoryButton[numberOfElements];
 
         // Load the images
-        buttonGraphics = new int[numberOfElements / 2];
-        buttonGraphics[0] = R.drawable.afraid;
-        buttonGraphics[1] = R.drawable.full;
-        buttonGraphics[2] = R.drawable.hug;
-        buttonGraphics[3] = R.drawable.laugh;
-        buttonGraphics[4] = R.drawable.no_way;
-        buttonGraphics[5] = R.drawable.peep;
+        buttonGraphics = getIntent().getIntegerArrayListExtra("images");
 
         // Shuffle the images and button position
         buttonGraphicLocations = new int[numberOfElements];
@@ -121,9 +128,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         // Add the image to GridLayout and add on click listener
         for(int r = 0; r < numRows; r++) {
             for(int c = 0; c < numColumns; c++) {
-                MemoryButton tempButton = new MemoryButton(this, r, c, buttonGraphics[buttonGraphicLocations[r * numColumns + c]]);
+                int index = buttonGraphicLocations[r * numColumns + c];
+                MemoryButton tempButton = new MemoryButton(this, r, c, buttonGraphics.get(index));
                 tempButton.setId(View.generateViewId());
                 tempButton.setOnClickListener(this);
+                tempButton.setWidth(200);
+                tempButton.setHeight(200);
                 buttons[r * numColumns + c] = tempButton;
                 gridLayout.addView(tempButton);
             }
@@ -152,6 +162,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if(!buttons[i].isMatched)
                 return false;
         }
+        myStopwatch.cancel();
         return true;
     }
 
@@ -175,9 +186,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if(selectedButton1.getId() == button.getId())
             return;
         else {
-            numberOfMatches++;
-            TextView numMatches = findViewById(R.id.numMatches);
-            numMatches.setText(numberOfMatches.toString());
+            numberOfTries++;
+            numTries.setText(numberOfTries.toString());
         }
 
         if(selectedButton1.getFrontImageDrawableId() == button.getFrontImageDrawableId()) {
@@ -191,9 +201,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             selectedButton1 = null;
 
+            numberOfMatches++;
+            numMatches.setText(numberOfMatches.toString() + " / 6");
+
             if(isGameOver()) {
                 String title = "You Won!";
-                String msg = "Congrats, you beat the game in " + numberOfMatches.toString() + " matches";
+                String msg = "Congrats, you beat the game in " + numberOfTries.toString() + " matches";
                 dlg.setMessage(msg).setTitle(title).show();
             }
 
@@ -204,7 +217,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             isBusy = true;
 
             // If user select both wrong buttons, delay input and flip back both buttons first before accepting new input
-            final Handler handler = new Handler();
+            final Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
