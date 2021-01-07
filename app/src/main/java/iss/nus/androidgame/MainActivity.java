@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,8 +43,23 @@ public class MainActivity extends AppCompatActivity {
                     String urlToFetch = imageUrl.getText().toString().trim();
                     if(!urlToFetch.isEmpty()) {
                         Toast.makeText(getApplicationContext(), urlToFetch , Toast.LENGTH_SHORT).show();
-                        // TODO: Use JsoupCrawler to get image url and store it in imageUrlList, then we use the link to download the images
+
+                        // Use JsoupCrawler to get image url and store it in imageUrlList, then we use the link to download the images
                         // Android does not allow network operation like connecting to a url on main thread
+                        // Doing it this way sometimes work sometimes doesn't
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    imageUrlList = JsoupCrawler.crawImageUrl(urlToFetch);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
+
+                        Integer size = imageUrlList.size();
+                        Toast.makeText(getApplicationContext(), size.toString(), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "URL cannot be empty" , Toast.LENGTH_SHORT).show();
                     }
