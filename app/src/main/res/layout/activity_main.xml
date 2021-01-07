@@ -73,6 +73,13 @@
             android:layout_weight="12"
             />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:id="@+id/image1"
+            android:src="@drawable/qnmark"></ImageView>
+
         <Button
             android:id="@+id/startGameButton"
             android:layout_width="match_parent"
