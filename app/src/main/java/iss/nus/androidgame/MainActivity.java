@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,11 +21,17 @@ public class MainActivity extends AppCompatActivity {
 
     Set<Integer> selectedImageId = new HashSet<>();
 
+    ArrayList<String> imageUrlList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_Light_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Hardcode imageUrl here, remove for actual demo
+        EditText imageUrl = findViewById(R.id.imageUrl);
+        imageUrl.setText("https://stocksnap.io");
 
         Button fetchButton = findViewById(R.id.fetchButton);
         fetchButton.setOnClickListener(new View.OnClickListener() {
@@ -38,9 +42,10 @@ public class MainActivity extends AppCompatActivity {
                     String urlToFetch = imageUrl.getText().toString().trim();
                     if(!urlToFetch.isEmpty()) {
                         Toast.makeText(getApplicationContext(), urlToFetch , Toast.LENGTH_SHORT).show();
-                        // TODO: Fetch Images here
+                        // TODO: Use JsoupCrawler to get image url and store it in imageUrlList, then we use the link to download the images
+                        // Android does not allow network operation like connecting to a url on main thread
                     } else {
-                        Toast.makeText(getApplicationContext(), "Please enter a vaild URL" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "URL cannot be empty" , Toast.LENGTH_SHORT).show();
                     }
                 }
             }
