@@ -143,8 +143,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 tempButton.setTag(index);
                 tempButton.setId(View.generateViewId());
                 tempButton.setOnClickListener(this);
-                tempButton.setWidth(200);
-                tempButton.setHeight(200);
+                tempButton.setWidth(100);
+                tempButton.setHeight(100);
                 buttons[r * numColumns + c] = tempButton;
                 gridLayout.addView(tempButton);
             }
