@@ -25,7 +25,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     // List of button position and images
     private int[] buttonGraphicLocations;
     // Image ID
-//    private int[] buttonGraphics;
     private ArrayList<Integer> buttonGraphics;
 
     // Reference to compare two buttons
