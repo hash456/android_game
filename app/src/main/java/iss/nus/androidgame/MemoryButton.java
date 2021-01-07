@@ -7,7 +7,7 @@ import android.widget.GridLayout;
 
 import androidx.appcompat.widget.AppCompatDrawableManager;
 
-public class MemoryButton extends androidx.appcompat.widget.AppCompatButton {
+public class MemoryButton extends androidx.appcompat.widget.AppCompatImageButton {
     protected int row;
     protected int col;
     protected int frontImageDrawableId;
@@ -18,6 +18,8 @@ public class MemoryButton extends androidx.appcompat.widget.AppCompatButton {
     protected Drawable front;
     protected Drawable back;
 
+    protected GridLayout.LayoutParams tempParams;
+
     @SuppressLint("RestrictedApi")
     public MemoryButton(Context context, int row, int col, int frontImageDrawableId) {
         super(context);
@@ -27,12 +29,14 @@ public class MemoryButton extends androidx.appcompat.widget.AppCompatButton {
 
         // Load images
         front = AppCompatDrawableManager.get().getDrawable(context, frontImageDrawableId);
-        back = AppCompatDrawableManager.get().getDrawable(context, R.drawable.question_mark);
+        back = AppCompatDrawableManager.get().getDrawable(context, R.drawable.qnmark);
 
         setBackground(back);
 
         // Set Grid Layout parameters
-        GridLayout.LayoutParams tempParams = new GridLayout.LayoutParams(GridLayout.spec(row), GridLayout.spec(col));
+        tempParams = new GridLayout.LayoutParams(GridLayout.spec(row), GridLayout.spec(col));
+
+        // Set the size of each button
         tempParams.width = (int) getResources().getDisplayMetrics().density * 150;
         tempParams.height = (int) getResources().getDisplayMetrics().density * 150;
         setLayoutParams(tempParams);
@@ -40,6 +44,14 @@ public class MemoryButton extends androidx.appcompat.widget.AppCompatButton {
 
     public boolean isMatched() {
         return isMatched;
+    }
+
+    public void setWidth(int n) {
+        tempParams.width = (int) getResources().getDisplayMetrics().density * n;
+    }
+
+    public void setHeight(int n) {
+        tempParams.height = (int) getResources().getDisplayMetrics().density * n;
     }
 
     public void setMatched(boolean matched) {
