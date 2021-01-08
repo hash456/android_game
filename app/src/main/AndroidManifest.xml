@@ -12,6 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/launcher_theme">
+        <receiver
+            android:name=".MyReceiver"
+            android:enabled="true"
+            android:exported="true" />
 
         <service
             android:name=".JsoupCrawler"
@@ -20,7 +24,8 @@
         </service>
         <activity
             android:name=".LandingActivity"
-            android:label="@string/title_activity_landing">
+            android:label="@string/title_activity_landing"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,11 +34,13 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="Choose 6 images"
-            android:windowSoftInputMode="adjustPan"/>
+            android:label="@string/main_activity"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".GameActivity"
-            android:label="@string/title_activity_game" />
+            android:label="@string/title_activity_game"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

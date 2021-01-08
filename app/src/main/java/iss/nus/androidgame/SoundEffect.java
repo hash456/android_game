@@ -6,6 +6,13 @@ import android.media.SoundPool;
 
 public class SoundEffect {
     private static SoundPool soundPool;
+    SoundPool.Builder soundPoolBuilder;
+
+
+    AudioManager audioManager;
+    float cV, mV, V;
+
+
     private static int clickSound;
     private static int matchSound;
     private static int failSound;
@@ -16,6 +23,7 @@ public class SoundEffect {
         matchSound=soundPool.load(context,R.raw.matched,1);
         failSound=soundPool.load(context,R.raw.failed,1);
     }
+
 
     public void playClickSound(){
         soundPool.play(clickSound,10.0f,10.0f,1,0,1.0f);
