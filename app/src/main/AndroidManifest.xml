@@ -12,6 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/launcher_theme">
+        <receiver
+            android:name=".MyReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
 
         <service
             android:name=".JsoupCrawler"
@@ -29,7 +33,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="Choose 6 images"
+            android:label="@string/main_activity"
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".GameActivity"
