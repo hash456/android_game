@@ -75,6 +75,14 @@
 
     </LinearLayout>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/takephoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/search_layout"
+        app:layout_constraintBottom_toTopOf="@+id/grid_wrapper"
+        android:text="Take photos" />
+
     <LinearLayout
         android:id="@+id/progress_area"
         android:layout_width="match_parent"
