@@ -1,10 +1,17 @@
 package iss.nus.androidgame;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.GridLayout;
 import android.widget.TextView;
 import android.content.DialogInterface;
@@ -14,6 +21,7 @@ import android.graphics.Color;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -25,7 +33,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     // List of button position and images
     private int[] buttonGraphicLocations;
     // Image ID
-    private ArrayList<Integer> buttonGraphics;
+    private ArrayList<String> buttonGraphics;
 
     // Reference to compare two buttons
     private MemoryButton selectedButton1;
@@ -44,11 +52,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private CountDownTimer myStopwatch;
 
+    private SoundEffect sound;
+    Animation animation;
+
+    private boolean timeOut = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_Light_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        animation= AnimationUtils.loadAnimation(GameActivity.this,R.anim.bounce);
+        sound=new SoundEffect(this);
 
         //Number of matches
         numMatches = findViewById(R.id.numMatches);
@@ -101,8 +116,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             public void onFinish() {
+                timeOut = true;
                 String title = "Time's up!";
-                String msg = "You took " + numberOfTries.toString() +  " to get " + numberOfMatches.toString() + " number of matches.";
+                String msg = "You took " + numberOfTries.toString() +  " tries to get " + numberOfMatches.toString() + " number of matches.";
                 dlg.setMessage(msg).setTitle(title).setIcon(android.R.drawable.ic_dialog_alert).show();
             }
 
@@ -119,7 +135,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         buttons = new MemoryButton[numberOfElements];
 
         // Load the images
-        buttonGraphics = getIntent().getIntegerArrayListExtra("images");
+        buttonGraphics = getIntent().getStringArrayListExtra("images");
 
         // Shuffle the images and button position
         buttonGraphicLocations = new int[numberOfElements];
@@ -129,7 +145,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         for(int r = 0; r < numRows; r++) {
             for(int c = 0; c < numColumns; c++) {
                 int index = buttonGraphicLocations[r * numColumns + c];
-                MemoryButton tempButton = new MemoryButton(this, r, c, buttonGraphics.get(index));
+
+                String imageName = buttonGraphics.get(index);
+                File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                File file = new File(dir, imageName);
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                Drawable d = new BitmapDrawable(getResources(), bitmap);
+
+                MemoryButton tempButton = new MemoryButton(this, r, c, d);
+                tempButton.setTag(index);
                 tempButton.setId(View.generateViewId());
                 tempButton.setOnClickListener(this);
                 tempButton.setWidth(200);
@@ -168,16 +192,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(isBusy)
+        animation= AnimationUtils.loadAnimation(GameActivity.this,R.anim.bounce);
+        if(isBusy || timeOut)
             return;
 
         MemoryButton button = (MemoryButton) v;
+        button.startAnimation(animation);
 
         if(button.isMatched)
             return;
 
         if(selectedButton1 == null) {
             selectedButton1 = button;
+            sound.playClickSound();
             selectedButton1.flip();
             return;
         }
@@ -190,9 +217,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             numTries.setText(numberOfTries.toString());
         }
 
-        if(selectedButton1.getFrontImageDrawableId() == button.getFrontImageDrawableId()) {
+        if(selectedButton1.getTag() == button.getTag()) {
             button.flip();
-
+            sound.playMatchedSound();
             button.setMatched(true);
             selectedButton1.setMatched(true);
 
@@ -206,12 +233,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             if(isGameOver()) {
                 String title = "You Won!";
-                String msg = "Congrats, you beat the game in " + numberOfTries.toString() + " matches";
+                String msg = "Congrats, you beat the game in " + numberOfTries.toString() + " tries.";
                 dlg.setMessage(msg).setTitle(title).show();
             }
 
             return;
         } else {
+            sound.playFailedSound();
             selectedButton2 = button;
             selectedButton2.flip();
             isBusy = true;
