@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -41,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.Theme_AppCompat_Light_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // For progress bar
+        ProgressBar progressBar = findViewById(R.id.pgProgressBar);
+        TextView progressText = findViewById(R.id.tvProgressPercentage);
+        Handler handler = new Handler();
+        final int[] percentDone = {0};
 
         // Hardcode imageUrl here, remove for actual demo
         EditText imageUrl = findViewById(R.id.imageUrl);
@@ -73,6 +81,31 @@ public class MainActivity extends AppCompatActivity {
                                 imagesToGridView();
                             }
                         }, 10000);
+
+                        new Thread(new Runnable() {
+                            public void run() {
+                                while (percentDone[0] < 100) {
+                                    percentDone[0] += 5;
+
+                                    handler.post(new Runnable() {
+                                        public void run() {
+                                            progressBar.setProgress(percentDone[0]);
+
+                                            progressText.setText(percentDone[0] + " of 100% done");
+                                        }
+                                    });
+
+                                    // This part is for testing only
+                                    try {
+                                        Thread.sleep(200);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                percentDone[0] = 0;
+                            }
+                        }).start();
+
                     } else {
                         Toast.makeText(getApplicationContext(), "URL cannot be empty" , Toast.LENGTH_SHORT).show();
                     }
