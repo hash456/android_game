@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/launcher_theme">
-        <activity android:name=".PhotoTakingActivity"></activity>
+
 
         <receiver
             android:name=".MyReceiver"
@@ -25,6 +25,7 @@
             android:enabled="true"
             android:exported="true">
         </service>
+
         <activity
             android:name=".LandingActivity"
             android:label="@string/title_activity_landing"
@@ -35,16 +36,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/main_activity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
+
         <activity
             android:name=".GameActivity"
             android:label="@string/title_activity_game"
-            android:screenOrientation="portrait"/>
-            android:label="@string/title_activity_game" />
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".PhotoTakingActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

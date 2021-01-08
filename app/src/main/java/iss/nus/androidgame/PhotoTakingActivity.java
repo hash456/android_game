@@ -114,7 +114,7 @@ public class PhotoTakingActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         Bitmap bitmap = BitmapFactory.decodeFile(photoFile);
-        String filename = photoFile.substring(photoFile.lastIndexOf("/")+1);
+        String filename = photoFile.substring(photoFile.lastIndexOf("/") + 1);
         ImageView imgView;
         switch (requestCode) {
             case REQ_TAKE_PHOTO_1:
