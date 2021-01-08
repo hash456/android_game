@@ -4,8 +4,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -45,6 +48,35 @@ public class MainActivity extends AppCompatActivity {
 
     AlertDialog.Builder dlg;
 
+    ProgressBar progressBar;
+    TextView progressText;
+
+    protected BroadcastReceiver progressBarReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(action == null)
+                return;
+
+            if(action.equals("DOWNLOAD_START")) {
+                // Show progress bar
+                progressBar.setProgress(0);
+            } else if(action.equals("DOWNLOAD_ONGOING")) {
+                Integer progress = intent.getIntExtra("Download Progress", 0) * 5;
+                // Advance progress bar
+                progressBar.setProgress(progress);
+                progressText.setText(progress.toString() + "% of 100% done");
+            } else if(action.equals("DOWNLOAD_COMPLETE")) {
+                // Fullup progress bar
+                progressBar.setProgress(100);
+                progressText.setText("100% of 100% done");
+                stopService(new Intent(MainActivity.this, JsoupCrawler.class));
+                images = getDownloadImages();
+                imagesToGridView();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_Light_NoActionBar);
@@ -52,10 +84,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // For progress bar
-        ProgressBar progressBar = findViewById(R.id.pgProgressBar);
-        TextView progressText = findViewById(R.id.tvProgressPercentage);
-        Handler handler = new Handler();
-        final int[] percentDone = {0};
+        progressBar = findViewById(R.id.pgProgressBar);
+        progressText = findViewById(R.id.tvProgressPercentage);
+//        Handler handler = new Handler();
+//        final int[] percentDone = {0};
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("DOWNLOAD_START");
+        filter.addAction("DOWNLOAD_ONGOING");
+        filter.addAction("DOWNLOAD_COMPLETE");
+        registerReceiver(progressBarReceiver, filter);
 
         // Hardcode imageUrl here, remove for actual demo
         EditText imageUrl = findViewById(R.id.imageUrl);
@@ -80,38 +118,38 @@ public class MainActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), urlToFetch , Toast.LENGTH_SHORT).show();
 
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                stopService(new Intent(MainActivity.this, JsoupCrawler.class));
-                                images = getDownloadImages();
-                                imagesToGridView();
-                            }
-                        }, 10000);
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                stopService(new Intent(MainActivity.this, JsoupCrawler.class));
+//                                images = getDownloadImages();
+//                                imagesToGridView();
+//                            }
+//                        }, 10000);
 
-                        new Thread(new Runnable() {
-                            public void run() {
-                                while (percentDone[0] < 100) {
-                                    percentDone[0] += 5;
-
-                                    handler.post(new Runnable() {
-                                        public void run() {
-                                            progressBar.setProgress(percentDone[0]);
-
-                                            progressText.setText(percentDone[0] + " of 100% done");
-                                        }
-                                    });
-
-                                    // This part is for testing only
-                                    try {
-                                        Thread.sleep(200);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                percentDone[0] = 0;
-                            }
-                        }).start();
+//                        new Thread(new Runnable() {
+//                            public void run() {
+//                                while (percentDone[0] < 100) {
+//                                    percentDone[0] += 5;
+//
+//                                    handler.post(new Runnable() {
+//                                        public void run() {
+//                                            progressBar.setProgress(percentDone[0]);
+//
+//                                            progressText.setText(percentDone[0] + " of 100% done");
+//                                        }
+//                                    });
+//
+//                                    // This part is for testing only
+//                                    try {
+//                                        Thread.sleep(200);
+//                                    } catch (InterruptedException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                                percentDone[0] = 0;
+//                            }
+//                        }).start();
 
                     } else {
                         Toast.makeText(getApplicationContext(), "URL cannot be empty" , Toast.LENGTH_SHORT).show();
