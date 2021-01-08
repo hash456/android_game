@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("URL",urlToFetch);
 
                         stopService(new Intent(MainActivity.this, JsoupCrawler.class));
+                        restoreDefault();
                         startService(intent);
 
                         Toast.makeText(getApplicationContext(), urlToFetch , Toast.LENGTH_SHORT).show();
@@ -187,5 +188,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void restoreDefault() {
+        for(int i = 1; i <= 20; i++) {
+            MemoryImageView iv = findViewById(i);
+            iv.setSelected(false);
+            selectedImageId.clear();
+            iv.setBackgroundResource(R.drawable.qnmark);
+        }
     }
 }
