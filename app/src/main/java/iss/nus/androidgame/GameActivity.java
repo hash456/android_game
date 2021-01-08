@@ -1,7 +1,12 @@
 package iss.nus.androidgame;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -16,6 +21,7 @@ import android.graphics.Color;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -27,7 +33,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     // List of button position and images
     private int[] buttonGraphicLocations;
     // Image ID
-    private ArrayList<Integer> buttonGraphics;
+    private ArrayList<String> buttonGraphics;
 
     // Reference to compare two buttons
     private MemoryButton selectedButton1;
@@ -129,7 +135,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         buttons = new MemoryButton[numberOfElements];
 
         // Load the images
-        buttonGraphics = getIntent().getIntegerArrayListExtra("images");
+        buttonGraphics = getIntent().getStringArrayListExtra("images");
 
         // Shuffle the images and button position
         buttonGraphicLocations = new int[numberOfElements];
@@ -139,7 +145,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         for(int r = 0; r < numRows; r++) {
             for(int c = 0; c < numColumns; c++) {
                 int index = buttonGraphicLocations[r * numColumns + c];
-                MemoryButton tempButton = new MemoryButton(this, r, c, buttonGraphics.get(index));
+
+                String imageName = buttonGraphics.get(index);
+                File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                File file = new File(dir, imageName);
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                Drawable d = new BitmapDrawable(getResources(), bitmap);
+
+                MemoryButton tempButton = new MemoryButton(this, r, c, d);
                 tempButton.setTag(index);
                 tempButton.setId(View.generateViewId());
                 tempButton.setOnClickListener(this);
@@ -205,7 +218,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if(selectedButton1.getTag() == button.getTag()) {
-//        if(selectedButton1.getFrontImageDrawableId() == button.getFrontImageDrawableId()) {
             button.flip();
             sound.playMatchedSound();
             button.setMatched(true);

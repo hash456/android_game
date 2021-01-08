@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatDrawableManager;
 public class MemoryButton extends androidx.appcompat.widget.AppCompatImageButton {
     protected int row;
     protected int col;
-    protected int frontImageDrawableId;
+    protected Drawable frontImageDrawableId;
 
     protected boolean isFlipped = false;
     protected boolean isMatched = false;
@@ -22,14 +22,14 @@ public class MemoryButton extends androidx.appcompat.widget.AppCompatImageButton
     protected GridLayout.LayoutParams tempParams;
 
     @SuppressLint("RestrictedApi")
-    public MemoryButton(Context context, int row, int col, int frontImageDrawableId) {
+    public MemoryButton(Context context, int row, int col, Drawable frontImageDrawableId) {
         super(context);
         this.row = row;
         this.col = col;
         this.frontImageDrawableId = frontImageDrawableId;
 
         // Load images
-        front = AppCompatDrawableManager.get().getDrawable(context, frontImageDrawableId);
+        front = frontImageDrawableId;
         back = AppCompatDrawableManager.get().getDrawable(context, R.drawable.qnmark);
 
         setBackground(back);
@@ -57,14 +57,6 @@ public class MemoryButton extends androidx.appcompat.widget.AppCompatImageButton
 
     public void setMatched(boolean matched) {
         isMatched = matched;
-    }
-
-    public int getFrontImageDrawableId() {
-        return frontImageDrawableId;
-    }
-
-    public void setFrontImageDrawableId(int frontImageDrawableId) {
-        this.frontImageDrawableId = frontImageDrawableId;
     }
 
     public void flip() {

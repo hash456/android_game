@@ -63,23 +63,13 @@
         <GridView
             android:id="@+id/gridView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:columnWidth="90dp"
             android:numColumns="auto_fit"
             android:verticalSpacing="10dp"
             android:horizontalSpacing="10dp"
             android:stretchMode="columnWidth"
             android:gravity="center"
-            android:layout_weight="12"
-            />
-
-        <Button
-            android:id="@+id/startGameButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:textSize="12sp"
-            android:text="@string/start"
-            android:layout_weight="1"
             />
 
     </LinearLayout>
