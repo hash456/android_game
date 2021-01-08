@@ -1,5 +1,6 @@
 package iss.nus.androidgame;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -44,12 +45,14 @@ public class MainActivity extends AppCompatActivity {
 
     Set<String> selectedImageId = new HashSet<>();
 
-    ArrayList<Drawable> images = new ArrayList<>();
-
     AlertDialog.Builder dlg;
 
     ProgressBar progressBar;
     TextView progressText;
+    Integer progress;
+
+    // Don't allow game to start if user don't download image from URL
+    private boolean allowStartGame = false;
 
     Button takePhoto;
 
@@ -62,19 +65,30 @@ public class MainActivity extends AppCompatActivity {
 
             if(action.equals("DOWNLOAD_START")) {
                 // Show progress bar
+                progressBar.setVisibility(View.VISIBLE);
+                progressText.setVisibility(View.VISIBLE);
                 progressBar.setProgress(0);
             } else if(action.equals("DOWNLOAD_ONGOING")) {
-                Integer progress = intent.getIntExtra("Download Progress", 0) * 5;
+                progress = intent.getIntExtra("Download Progress", 0);
+                Integer pros = progress * 5;
+
                 // Advance progress bar
-                progressBar.setProgress(progress);
-                progressText.setText(progress.toString() + "% of 100% done");
+                progressBar.setProgress(pros);
+                progressText.setText(pros.toString() + "% of 100% done");
+
+                // Replace placeholder image with downloaded image
+                MemoryImageView iv = findViewById(progress + 1);
+                File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                File file = new File(dir, "pic" + progress.toString());
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                Drawable d = new BitmapDrawable(getResources(), bitmap);
+                iv.setBackgroundDrawable(d);
             } else if(action.equals("DOWNLOAD_COMPLETE")) {
-                // Fullup progress bar
+                // Fillup progress bar
                 progressBar.setProgress(100);
                 progressText.setText("100% of 100% done");
+                allowStartGame = true;
                 stopService(new Intent(MainActivity.this, JsoupCrawler.class));
-                images = getDownloadImages();
-                imagesToGridView();
             }
         }
     };
@@ -88,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
         // For progress bar
         progressBar = findViewById(R.id.pgProgressBar);
         progressText = findViewById(R.id.tvProgressPercentage);
-//        Handler handler = new Handler();
-//        final int[] percentDone = {0};
 
         IntentFilter filter = new IntentFilter();
         filter.addAction("DOWNLOAD_START");
@@ -115,43 +127,12 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent (MainActivity.this, JsoupCrawler.class);
                         intent.setAction("download");
                         intent.putExtra("URL",urlToFetch);
+
+                        stopService(new Intent(MainActivity.this, JsoupCrawler.class));
+                        restoreDefault();
                         startService(intent);
 
-
                         Toast.makeText(getApplicationContext(), urlToFetch , Toast.LENGTH_SHORT).show();
-
-//                        new Handler().postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                stopService(new Intent(MainActivity.this, JsoupCrawler.class));
-//                                images = getDownloadImages();
-//                                imagesToGridView();
-//                            }
-//                        }, 10000);
-
-//                        new Thread(new Runnable() {
-//                            public void run() {
-//                                while (percentDone[0] < 100) {
-//                                    percentDone[0] += 5;
-//
-//                                    handler.post(new Runnable() {
-//                                        public void run() {
-//                                            progressBar.setProgress(percentDone[0]);
-//
-//                                            progressText.setText(percentDone[0] + " of 100% done");
-//                                        }
-//                                    });
-//
-//                                    // This part is for testing only
-//                                    try {
-//                                        Thread.sleep(200);
-//                                    } catch (InterruptedException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-//                                percentDone[0] = 0;
-//                            }
-//                        }).start();
 
                     } else {
                         Toast.makeText(getApplicationContext(), "URL cannot be empty" , Toast.LENGTH_SHORT).show();
@@ -159,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
 
         takePhoto = findViewById(R.id.takephoto);
         takePhoto.setOnClickListener(new View.OnClickListener() {
@@ -194,45 +177,38 @@ public class MainActivity extends AppCompatActivity {
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id){
-                MemoryImageView iv = v.findViewById(position + 1);
+                if(allowStartGame) {
+                    MemoryImageView iv = v.findViewById(position + 1);
 
-                iv.toggle();
-
-                // Image Id based
-                if(iv.getSelected() && selectedImageId.size() < 6) {
-                    selectedImageId.add((String) iv.getTag());
-                } else if(iv.getSelected() && selectedImageId.size() >= 6) {
                     iv.toggle();
-                    Toast.makeText(getApplicationContext(), "6 image chosen", Toast.LENGTH_SHORT).show();
-                } else {
-                    selectedImageId.remove((String) iv.getTag());
-                }
 
-                if(selectedImageId.size() == 6) {
-                    dlg.show();
+                    // Image Id based
+                    if (iv.getSelected() && selectedImageId.size() < 6) {
+                        selectedImageId.add((String) iv.getTag());
+                    } else if (iv.getSelected() && selectedImageId.size() >= 6) {
+                        iv.toggle();
+                        Toast.makeText(getApplicationContext(), "6 image chosen", Toast.LENGTH_SHORT).show();
+                    } else {
+                        selectedImageId.remove((String) iv.getTag());
+                    }
+
+                    if(selectedImageId.size() == 6) {
+                        dlg.show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please enter URL", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
     }
 
-    protected ArrayList<Drawable> getDownloadImages() {
-        File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        ArrayList<Drawable> myList = new ArrayList<>();
-        for(Integer i = 0; i < 20; i++) {
-            File file = new File(dir, "pic" + i.toString());
-            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-            Drawable d = new BitmapDrawable(getResources(), bitmap);
-            myList.add(d);
-        }
-        return myList;
-    }
-
-    protected void imagesToGridView() {
-        for(Integer i = 0; i < 20; i++) {
-            MemoryImageView iv = findViewById(i + 1);
-            iv.setBackgroundDrawable(images.get(i));
-            iv.setTag("pic" + i.toString());
+    public void restoreDefault() {
+        for(int i = 1; i <= 20; i++) {
+            MemoryImageView iv = findViewById(i);
+            iv.setSelected(false);
+            selectedImageId.clear();
+            iv.setBackgroundResource(R.drawable.qnmark);
         }
     }
 }

@@ -28,4 +28,8 @@ public class MemoryImageView extends androidx.appcompat.widget.AppCompatImageVie
     public boolean getSelected() {
         return isSelected;
     }
+
+    public void setSelected(boolean s) {
+        isSelected = s;
+    }
 }
