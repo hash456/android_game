@@ -70,12 +70,21 @@ public final class JsoupCrawler extends Service {
         ArrayList<Drawable> drawableList = new ArrayList<>();
         System.out.println("before dwltoSave");
 
+        Intent intent1 = new Intent();
+        intent1.setAction("DOWNLOAD_START");
+        sendBroadcast(intent1);
+
         if (imagesList.size() < 20)
         {
             for (int i = 0; i < imagesList.size(); i++)
             {
                 System.out.println(imagesList.get(i));
                 downloadToSave(imagesList.get(i), "pic" + valueOf(i));
+
+                Intent intent2 = new Intent();
+                intent2.setAction("DOWNLOAD_ONGOING");
+                intent2.putExtra("Download Progress", i);
+                sendBroadcast(intent2);
             }
         }
         else {
@@ -83,8 +92,17 @@ public final class JsoupCrawler extends Service {
             for (int i = 0; i < 20; i++) {
                 System.out.println(imagesList.get(i));
                 downloadToSave(imagesList.get(i), "pic" + valueOf(i));
+
+                Intent intent2 = new Intent();
+                intent2.setAction("DOWNLOAD_ONGOING");
+                intent2.putExtra("Download Progress", i);
+                sendBroadcast(intent2);
             }
         }
+
+        Intent intent3 = new Intent();
+        intent3.setAction("DOWNLOAD_COMPLETE");
+        sendBroadcast(intent3);
 
         //Maybe can return list of ids instead
         return drawableList;
