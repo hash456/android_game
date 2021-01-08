@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PhotoTakingActivity"
@@ -15,7 +22,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:src="@drawable/placeholder" />
 
@@ -26,7 +33,7 @@
         app:layout_constraintWidth_percent="0.25"
         app:layout_constraintTop_toBottomOf="@id/imgview1"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="30dp"
         android:text="Take Photo"
         android:textSize="13sp"/>
 
@@ -84,7 +91,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toBottomOf="@id/take_photo1"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:src="@drawable/placeholder"/>
 
@@ -92,12 +99,12 @@
         android:id="@+id/take_photo4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.25"
-        app:layout_constraintTop_toBottomOf="@id/imgview4"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="30dp"
         android:text="Take Photo"
-        android:textSize="13sp"/>
+        android:textSize="13sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgview4"
+        app:layout_constraintWidth_percent="0.25" />
 
     <ImageView
         android:id="@+id/imgview5"
@@ -159,3 +166,5 @@
         android:text="Start Game"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
