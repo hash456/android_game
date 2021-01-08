@@ -1,5 +1,6 @@
 package iss.nus.androidgame;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.graphics.Color;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
@@ -44,11 +46,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private CountDownTimer myStopwatch;
 
+    private Date currentClick;
+    private Date lastClick;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_Light_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        Alarm.halfTime(getApplicationContext());
+        Alarm.tenSec(getApplicationContext());
 
         //Number of matches
         numMatches = findViewById(R.id.numMatches);
@@ -171,6 +179,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if(isBusy)
             return;
 
+        Alarm.hurryUp(getApplicationContext());
+
         MemoryButton button = (MemoryButton) v;
 
         if(button.isMatched)
@@ -183,14 +193,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // If user click the same button repeatedly, we ignore them
-        if(selectedButton1.getId() == button.getId())
+        if(selectedButton1.getId() == button.getId()) {
+            Alarm.hurryUp_Stop(getApplicationContext());
             return;
+        }
         else {
             numberOfTries++;
             numTries.setText(numberOfTries.toString());
         }
 
         if(selectedButton1.getFrontImageDrawableId() == button.getFrontImageDrawableId()) {
+            Alarm.hurryUp_Stop(getApplicationContext());
+
             button.flip();
 
             button.setMatched(true);
@@ -212,6 +226,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             return;
         } else {
+            Alarm.hurryUp_Stop(getApplicationContext());
             selectedButton2 = button;
             selectedButton2.flip();
             isBusy = true;
@@ -226,6 +241,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     selectedButton1 = null;
                     selectedButton2 = null;
                     isBusy = false;
+                    Alarm.hurryUp(getApplicationContext());
                 }
             }, 500);
         }
