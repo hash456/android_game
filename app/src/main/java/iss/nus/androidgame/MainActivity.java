@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     TextView progressText;
 
+    Button takePhoto;
+
     protected BroadcastReceiver progressBarReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -155,6 +157,15 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "URL cannot be empty" , Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
+        });
+
+        takePhoto = findViewById(R.id.takephoto);
+        takePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PhotoTakingActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PhotoTakingActivity"
+    >
+
+    <ImageView
+        android:id="@+id/imgview1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/placeholder" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/take_photo1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintTop_toBottomOf="@id/imgview1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="20dp"
+        android:text="Take Photo"
+        android:textSize="13sp"/>
+
+    <ImageView
+        android:id="@+id/imgview2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintLeft_toRightOf="@id/imgview1"
+        android:src="@drawable/placeholder"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/take_photo2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintTop_toBottomOf="@id/imgview2"
+        app:layout_constraintLeft_toRightOf="@id/take_photo1"
+        android:layout_marginLeft="20dp"
+        android:text="Take Photo"
+        android:textSize="13sp"/>
+
+    <ImageView
+        android:id="@+id/imgview3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintLeft_toRightOf="@id/imgview2"
+        android:src="@drawable/placeholder"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/take_photo3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintTop_toBottomOf="@id/imgview3"
+        app:layout_constraintLeft_toRightOf="@id/take_photo2"
+        android:layout_marginLeft="20dp"
+        android:text="Take Photo"
+        android:textSize="13sp"/>
+
+    <ImageView
+        android:id="@+id/imgview4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toBottomOf="@id/take_photo1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/placeholder"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/take_photo4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintTop_toBottomOf="@id/imgview4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="20dp"
+        android:text="Take Photo"
+        android:textSize="13sp"/>
+
+    <ImageView
+        android:id="@+id/imgview5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toBottomOf="@id/take_photo2"
+        app:layout_constraintLeft_toRightOf="@id/imgview4"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/placeholder"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/take_photo5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintTop_toBottomOf="@id/imgview5"
+        app:layout_constraintLeft_toRightOf="@id/take_photo4"
+        android:layout_marginLeft="20dp"
+        android:text="Take Photo"
+        android:textSize="13sp"/>
+
+    <ImageView
+        android:id="@+id/imgview6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toBottomOf="@id/take_photo3"
+        app:layout_constraintLeft_toRightOf="@id/imgview5"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/placeholder"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/take_photo6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintTop_toBottomOf="@id/imgview6"
+        app:layout_constraintLeft_toRightOf="@id/take_photo5"
+        android:layout_marginLeft="20dp"
+        android:text="Take Photo"
+        android:textSize="13sp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/startGame"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.7"
+        app:layout_constraintTop_toBottomOf="@id/take_photo4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.2"
+        android:text="Start Game"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
