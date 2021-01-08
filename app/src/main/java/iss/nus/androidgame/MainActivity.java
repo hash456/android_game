@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Hardcode imageUrl here, remove for actual demo
-//        EditText imageUrl = findViewById(R.id.imageUrl);
-//        imageUrl.setText("https://stocksnap.io");
+        EditText imageUrl = findViewById(R.id.imageUrl);
+        imageUrl.setText("https://stocksnap.io");
 
         Button fetchButton = findViewById(R.id.fetchButton);
         fetchButton.setOnClickListener(new View.OnClickListener() {
