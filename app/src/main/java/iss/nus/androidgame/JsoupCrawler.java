@@ -29,6 +29,8 @@ import static java.lang.String.valueOf;
 // Using Jsoup library
 public final class JsoupCrawler extends Service {
 
+    private Thread myThread;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
@@ -36,7 +38,7 @@ public final class JsoupCrawler extends Service {
         System.out.println("hello from jsoup");
         if (action.compareToIgnoreCase("download") == 0)
         {
-            new Thread(new Runnable() {
+            myThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     String url = intent.getStringExtra("URL");
@@ -48,13 +50,14 @@ public final class JsoupCrawler extends Service {
                         e.printStackTrace();
                     }
                 }
-            }).start();
+            });
+            myThread.start();
         }
 
         return START_NOT_STICKY;
     }
 
-    public ArrayList<Drawable> crawImageUrl(String url) throws IOException {
+    public ArrayList<Drawable> crawImageUrl(String url) throws IOException, InterruptedException {
         Document doc = Jsoup.connect(url).get();
         ArrayList<String> imagesList = new ArrayList<>();
         Elements images = doc.getElementsByTag("img");
@@ -74,30 +77,20 @@ public final class JsoupCrawler extends Service {
         intent1.setAction("DOWNLOAD_START");
         sendBroadcast(intent1);
 
-        if (imagesList.size() < 20)
+        int n = Math.min(images.size(), 20);
+
+        for (int i = 0; i < n; i++)
         {
-            for (int i = 0; i < imagesList.size(); i++)
-            {
-                System.out.println(imagesList.get(i));
-                downloadToSave(imagesList.get(i), "pic" + valueOf(i));
+            System.out.println(imagesList.get(i));
+            downloadToSave(imagesList.get(i), "pic" + valueOf(i));
 
-                Intent intent2 = new Intent();
-                intent2.setAction("DOWNLOAD_ONGOING");
-                intent2.putExtra("Download Progress", i);
-                sendBroadcast(intent2);
-            }
-        }
-        else {
+//            Thread.sleep(1000);
 
-            for (int i = 0; i < 20; i++) {
-                System.out.println(imagesList.get(i));
-                downloadToSave(imagesList.get(i), "pic" + valueOf(i));
-
-                Intent intent2 = new Intent();
-                intent2.setAction("DOWNLOAD_ONGOING");
-                intent2.putExtra("Download Progress", i);
-                sendBroadcast(intent2);
-            }
+            Intent intent2 = new Intent();
+            intent2.setAction("DOWNLOAD_ONGOING");
+            intent2.putExtra("Download Progress", i);
+            intent2.putExtra("picName", "pic" + valueOf(i));
+            sendBroadcast(intent2);
         }
 
         Intent intent3 = new Intent();
@@ -107,16 +100,6 @@ public final class JsoupCrawler extends Service {
         //Maybe can return list of ids instead
         return drawableList;
     }
-
-    /*public static Drawable LoadImageFromWebOperations(String url, int i) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "pic" + valueOf(i));
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
-    }*/
 
     public boolean downloadToSave(String where, String filename) {
         File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -147,6 +130,8 @@ public final class JsoupCrawler extends Service {
     public void onDestroy()
     {
         super.onDestroy();
+
+        myThread.interrupt();
 
         Handler mainHandler = new Handler(Looper.getMainLooper());
         mainHandler.post(new Runnable() {
