@@ -22,7 +22,11 @@ import android.graphics.Color;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -53,6 +57,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private AlertDialog.Builder dlg;
 
     private CountDownTimer myStopwatch;
+    private long time;
+    private File mTargetFile;
 
     private Date currentClick;
     private Date lastClick;
@@ -69,6 +75,20 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_game);
         animation= AnimationUtils.loadAnimation(GameActivity.this,R.anim.bounce);
         sound=new SoundEffect(this);
+
+        // Create new file to record highscore
+        String filePath = "SampleFolder";
+        String fileName = "SampleFile.txt";
+        mTargetFile = new File(getApplicationContext().getFilesDir(), filePath + "/" + fileName);
+        File parent = mTargetFile.getParentFile();
+        try {
+            if (!parent.exists()) {
+                parent.mkdirs();
+                parent.createNewFile();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Alarm.halfTime(getApplicationContext());
         Alarm.tenSec(getApplicationContext());
@@ -121,6 +141,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 }
+                time = millisUntilFinished;
             }
 
             public void onFinish() {
@@ -244,8 +265,28 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             if(isGameOver()) {
                 String title = "You Won!";
-                String msg = "Congrats, you beat the game in " + numberOfTries.toString() + " tries.";
+
+                Integer myTime = Math.round((60000 - time) / 1000);
+                String msg = "Congrats, you took " + myTime.toString() + "s and " + numberOfTries.toString() + " tries.";
                 dlg.setMessage(msg).setTitle(title).show();
+
+                // Save time to local storage
+                try {
+                    File parent = mTargetFile.getParentFile();
+                    if (!parent.exists()) {
+                        throw new IllegalStateException("File don't exist");
+                    }
+//                    FileOutputStream fos = new FileOutputStream(mTargetFile, true);
+//                    String fileContent =  myTime.toString();
+//                    fos.write(fileContent.getBytes());
+//                    fos.close();
+                    FileWriter fileWriter = new FileWriter(mTargetFile, true);
+                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                    bufferedWriter.write(myTime.toString() + "\n");
+                    bufferedWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             return;

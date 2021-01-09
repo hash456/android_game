@@ -61,6 +61,12 @@
         app:layout_constraintVertical_bias="0.1"
         app:layout_constraintHeight_percent="0.8">
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/takephoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Take photos" />
+
         <GridView
             android:id="@+id/gridView"
             android:layout_width="match_parent"
@@ -71,17 +77,10 @@
             android:horizontalSpacing="10dp"
             android:stretchMode="columnWidth"
             android:gravity="center"
-            />
+            >
+        </GridView>
 
     </LinearLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/takephoto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/search_layout"
-        app:layout_constraintBottom_toTopOf="@+id/grid_wrapper"
-        android:text="Take photos" />
 
     <LinearLayout
         android:id="@+id/progress_area"
@@ -114,6 +113,7 @@
             android:textSize="20sp"
             android:gravity="center"
             android:layout_below="@+id/progressBar" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

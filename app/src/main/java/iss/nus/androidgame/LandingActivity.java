@@ -24,5 +24,14 @@ public class LandingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button highScoreButton = findViewById(R.id.highScoreButton);
+        highScoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LandingActivity.this, HighScoreActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
