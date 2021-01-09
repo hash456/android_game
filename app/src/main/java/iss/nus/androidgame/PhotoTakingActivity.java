@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class PhotoTakingActivity extends AppCompatActivity
@@ -39,6 +40,8 @@ public class PhotoTakingActivity extends AppCompatActivity
     ArrayList<String> photoNameList = new ArrayList<>();
     int photoCount = 1;
 
+    Button startGame;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_Light_NoActionBar);
@@ -52,6 +55,9 @@ public class PhotoTakingActivity extends AppCompatActivity
         Button iv5 = findViewById(R.id.take_photo5);
         Button iv6 = findViewById(R.id.take_photo6);
 
+        startGame = findViewById(R.id.startGame);
+        startGame.setVisibility(View.INVISIBLE);
+
         iv1.setOnClickListener(this);
         iv2.setOnClickListener(this);
         iv3.setOnClickListener(this);
@@ -59,11 +65,12 @@ public class PhotoTakingActivity extends AppCompatActivity
         iv5.setOnClickListener(this);
         iv6.setOnClickListener(this);
 
-        Collections.addAll(photoNameList, listHolder);
+        //
 
-        findViewById(R.id.startGame).setOnClickListener(new View.OnClickListener() {
+        startGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Collections.addAll(photoNameList, listHolder);
                 Intent intent = new Intent(PhotoTakingActivity.this, GameActivity.class);
                 intent.putStringArrayListExtra("images", photoNameList);
                 startActivity(intent);
@@ -113,52 +120,71 @@ public class PhotoTakingActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // listHolder -> only collect 6 photos. Will update the list every time
+        // user change photo
         Bitmap bitmap = BitmapFactory.decodeFile(photoFile);
         String filename = photoFile.substring(photoFile.lastIndexOf("/") + 1);
         ImageView imgView;
+        Button btn;
         switch (requestCode) {
             case REQ_TAKE_PHOTO_1:
                 imgView = findViewById(R.id.imgview1);
+                btn = findViewById(R.id.take_photo1);
                 if (imgView != null) {
                     imgView.setImageBitmap(bitmap);
-                    photoNameList.set(REQ_TAKE_PHOTO_1, filename);
+                    listHolder[REQ_TAKE_PHOTO_1] = filename;
+                    btn.setText("Change Photo");
                 }
                 break;
             case REQ_TAKE_PHOTO_2:
                 imgView = findViewById(R.id.imgview2);
+                btn = findViewById(R.id.take_photo2);
                 if (imgView != null) {
                     imgView.setImageBitmap(bitmap);
-                    photoNameList.set(REQ_TAKE_PHOTO_2, filename);
+                    listHolder[REQ_TAKE_PHOTO_2] = filename;
+                    btn.setText("Change Photo");
                 }
                 break;
             case REQ_TAKE_PHOTO_3:
                 imgView = findViewById(R.id.imgview3);
+                btn = findViewById(R.id.take_photo3);
                 if (imgView != null) {
                     imgView.setImageBitmap(bitmap);
-                    photoNameList.set(REQ_TAKE_PHOTO_3, filename);
+                    listHolder[REQ_TAKE_PHOTO_3] = filename;
+                    btn.setText("Change Photo");
                 }
                 break;
             case REQ_TAKE_PHOTO_4:
                 imgView = findViewById(R.id.imgview4);
+                btn = findViewById(R.id.take_photo4);
                 if (imgView != null) {
                     imgView.setImageBitmap(bitmap);
-                    photoNameList.set(REQ_TAKE_PHOTO_4, filename);
+                    listHolder[REQ_TAKE_PHOTO_4] = filename;
+                    btn.setText("Change Photo");
                 }
                 break;
             case REQ_TAKE_PHOTO_5:
                 imgView = findViewById(R.id.imgview5);
+                btn = findViewById(R.id.take_photo5);
                 if (imgView != null) {
                     imgView.setImageBitmap(bitmap);
-                    photoNameList.set(REQ_TAKE_PHOTO_5, filename);
+                    listHolder[REQ_TAKE_PHOTO_5] = filename;
+                    btn.setText("Change Photo");
                 }
                 break;
             case REQ_TAKE_PHOTO_6:
                 imgView = findViewById(R.id.imgview6);
+                btn = findViewById(R.id.take_photo6);
                 if (imgView != null) {
                     imgView.setImageBitmap(bitmap);
-                    photoNameList.set(REQ_TAKE_PHOTO_6, filename);
+                    listHolder[REQ_TAKE_PHOTO_6] = filename;
+                    btn.setText("Change Photo");
                 }
                 break;
+        }
+
+        if (!Arrays.stream(listHolder).anyMatch(""::equals)) {
+            startGame.setVisibility(View.VISIBLE);
         }
 
     }

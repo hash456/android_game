@@ -124,6 +124,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             public void onFinish() {
+                Alarm.hurryUp_Stop(getApplicationContext());
                 timeOut = true;
                 String title = "Time's up!";
                 String msg = "You took " + numberOfTries.toString() +  " tries to get " + numberOfMatches.toString() + " number of matches.";
@@ -243,6 +244,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             numMatches.setText(numberOfMatches.toString() + " / 6");
 
             if(isGameOver()) {
+                Alarm.hurryUp_Stop(getApplicationContext());
+                Alarm.halfTime_stop(getApplicationContext());
+                Alarm.tenSec_stop(getApplicationContext());
                 String title = "You Won!";
                 String msg = "Congrats, you beat the game in " + numberOfTries.toString() + " tries.";
                 dlg.setMessage(msg).setTitle(title).show();
@@ -270,6 +274,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }, 500);
         }
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Alarm.tenSec_stop(getApplicationContext());
+        Alarm.halfTime_stop(getApplicationContext());
+        Alarm.hurryUp_Stop(getApplicationContext());
     }
 }
