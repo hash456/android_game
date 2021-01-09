@@ -58,4 +58,28 @@ public class Alarm {
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pendingIntent);
     }
+
+    public static void halfTime_stop(Context context) {
+        Date when = new Date(System.currentTimeMillis());
+        Intent intent= new Intent(context, MyReceiver.class);
+        intent.setAction("HALF_TIME");
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,0,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarm.cancel(pendingIntent);
+    }
+
+    public static void tenSec_stop(Context context) {
+        Date when = new Date(System.currentTimeMillis());
+        Intent intent = new Intent(context, MyReceiver.class);
+        intent.setAction("TEN_SEC");
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,0,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarm.cancel(pendingIntent);
+    }
 }
