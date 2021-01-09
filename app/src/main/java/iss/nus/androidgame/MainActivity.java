@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     // Don't allow game to start if user don't download image from URL
     private boolean allowStartGame = false;
 
+    Button takePhoto;
+
     protected BroadcastReceiver progressBarReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -140,6 +142,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+        takePhoto = findViewById(R.id.takephoto);
+        takePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PhotoTakingActivity.class);
+                startActivity(intent);
+            }
+        });
 
         GridView gridview = (GridView) findViewById(R.id.gridView);
 
